@@ -1,0 +1,24 @@
+ul {
+  position: relative;
+  list-style: none;
+  li {
+    display: inline;
+    line-height: 2.5rem;
+    float: left;
+    margin: .625rem;
+    a {
+      color          : #000;
+      text-decoration: none;
+      :hover {
+        color: blue;
+      }
+    }
+
+    a.active {
+      color: red;
+    }
+  }
+}
+div.clear {
+  clear: both;
+}

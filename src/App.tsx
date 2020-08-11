@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
+import { connect } from 'react-redux';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import './App.css';
 
-function App() {
+import PrivateRoute from './routes/PrivateRoute';
+
+import Home from './views/Home';
+import Post from './views/Post';
+import Login from './views/Login';
+import About from './views/About';
+
+import { LoginAccount } from './interfaces';
+
+const App: React.FC<{ account?: LoginAccount }> = (props) => {
+  const account: LoginAccount | undefined = props.account;
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Route path="/" >
+          <Redirect to="/home" />
+        </Route>
+        <Route path="/home" exact component={Home} />
+        <PrivateRoute path="/posts" isAuth={!!account?.username}><Post /></PrivateRoute>
+        <Route path="/login" exact component={Login} />
+        <Route path="/about" exact component={About} />
+      </Router>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+  return {
+    account: state.login.account
+  }
+}
+
+export default connect(mapStateToProps)(App);
